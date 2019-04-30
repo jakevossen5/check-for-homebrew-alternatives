@@ -36,21 +36,24 @@ def check_for_homebrew_app(homebrew_app):
     req = urllib.request.Request(url)
 
     ##parsing response
-    r = urllib.request.urlopen(req).read()
-    # print("checking homrbew app", str(homebrew_app))
-    # r = requests.get('https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json')
     try:
-        r_data = json.loads(r.decode('utf-8'))
-        for artifact_list in r_data['artifacts']:
-            for a in artifact_list:
-                if type(a) == dict:
-                    for key, value in a.items():
-                        if (value in installed_apps_str or os.path.exists(value) or os.path.exists('/Applications/' + value)) and homebrew_app not in installed_homebrew_apps:
-                            print("Try installing", homebrew_app)
-                            print("Value that triggered", value)
-                elif a.endswith('.app') and str(a) in installed_apps_str and homebrew_app not in installed_homebrew_apps:
-                    print("try installing", homebrew_app)
+        r = urllib.request.urlopen(req).read()
+        # print("checking homrbew app", str(homebrew_app))
+        # r = requests.get('https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json')
+        try:
+            r_data = json.loads(r.decode('utf-8'))
+            for artifact_list in r_data['artifacts']:
+                for a in artifact_list:
+                    if type(a) == dict:
+                        for key, value in a.items():
+                            if not_installed_and_valid_array(value, homebrew_app):
+                                print("Try installing", homebrew_app)
+                                print("Value that triggered", value)
+                    elif not_installed_and_valid_string(a, homebrew_app):
+                        print("try installing", homebrew_app)
 
+        except:
+            pass
     except:
         pass
 
@@ -58,4 +61,9 @@ def check_for_homebrew_app(homebrew_app):
     #     for artifact_list in item['artifacts']:
     
     # print(homebrew_data)
+def not_installed_and_valid_string(a, homebrew_app):
+    return a.endswith('.app') and str(a) in installed_apps_str and homebrew_app not in installed_homebrew_apps
+
+def not_installed_and_valid_array(value, homebrew_app):
+    return (value in installed_apps_str or os.path.exists(value) or os.path.exists('/Applications/' + value)) and homebrew_app not in installed_homebrew_apps
 main()
