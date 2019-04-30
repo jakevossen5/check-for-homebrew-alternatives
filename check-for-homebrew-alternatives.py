@@ -1,4 +1,5 @@
-import requests
+import urllib.request
+import json
 import subprocess
 import os
 import multiprocessing
@@ -31,10 +32,15 @@ def main():
         p.map(check_for_homebrew_app, all_avaliable_homebrew_apps)
 
 def check_for_homebrew_app(homebrew_app):
+    url = 'https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json'
+    req = urllib.request.Request(url)
+
+    ##parsing response
+    r = urllib.request.urlopen(req).read()
     # print("checking homrbew app", str(homebrew_app))
-    r = requests.get('https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json')
+    # r = requests.get('https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json')
     try:
-        r_data = r.json()
+        r_data = json.loads(r.decode('utf-8'))
         for artifact_list in r_data['artifacts']:
             for a in artifact_list:
                 if type(a) == dict:
