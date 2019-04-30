@@ -1,0 +1,4 @@
+#+TITLE: check-for-homebrew-alternatives
+
+Run this Python script to look for potential Hombrew version of apps
+that are not installed
