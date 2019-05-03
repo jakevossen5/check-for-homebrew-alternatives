@@ -11,7 +11,7 @@ from multiprocessing import Pool
 installed_homebrew_apps_str = str(subprocess.check_output(r'brew cask list -1', shell = True))
 installed_homebrew_apps_str = installed_homebrew_apps_str[2:]
 installed_homebrew_apps = installed_homebrew_apps_str.split('\\n') # there might be one extra elemenent at the end here
-print("installed homebrew apps", installed_homebrew_apps) 
+# print("installed homebrew apps", installed_homebrew_apps) 
 
 installed_apps_str = str(subprocess.check_output(r'ls -1 /Applications/', shell = True)) # maybe take in /Applications as an option in the running of the programs
 installed_apps = installed_apps_str.split('\\n')
@@ -22,14 +22,14 @@ all_avaliable_homebrew_apps_str = all_avaliable_homebrew_apps_str[2:]
 
 all_avaliable_homebrew_apps = all_avaliable_homebrew_apps_str.split('\\n')
 # print(all_avaliable_homebrew_apps[1])
-print("atom in hombrew apps:", "atom" in installed_homebrew_apps)
-print("cd-to-terminal in hombrew apps:", "cd-to-terminal" in installed_homebrew_apps)
+#print("atom in hombrew apps:", "atom" in installed_homebrew_apps)
+#print("cd-to-terminal in hombrew apps:", "cd-to-terminal" in installed_homebrew_apps)
 
 def main():
     # all_avaliable_homebrew_apps = ['cd-to-terminal']
-    threads_count = multiprocessing.cpu_count()
-    with Pool(threads_count) as p:
-        p.map(check_for_homebrew_app, all_avaliable_homebrew_apps)
+        # p.map(check_for_homebrew_app, all_avaliable_homebrew_apps)
+    for homebrew_app in all_avaliable_homebrew_apps:
+        check_for_homebrew_app(homebrew_app)
 
 def check_for_homebrew_app(homebrew_app):
     url = 'https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json'
@@ -46,7 +46,7 @@ def check_for_homebrew_app(homebrew_app):
                 for a in artifact_list:
                     if type(a) == dict:
                         for key, value in a.items():
-                            if not_installed_and_valid_array(value, homebrew_app):
+                            if not_installed_and_valid_string(value, homebrew_app):
                                 print("Try installing", homebrew_app)
                                 print("Value that triggered", value)
                     elif not_installed_and_valid_string(a, homebrew_app):
@@ -62,7 +62,7 @@ def check_for_homebrew_app(homebrew_app):
     
     # print(homebrew_data)
 def not_installed_and_valid_string(a, homebrew_app):
-    return a.endswith('.app') and str(a) in installed_apps_str and homebrew_app not in installed_homebrew_apps
+    return ((a.endswith('.app') and a in installed_apps)) and homebrew_app not in installed_homebrew_apps
 
 def not_installed_and_valid_array(value, homebrew_app):
     return (value in installed_apps_str or os.path.exists(value) or os.path.exists('/Applications/' + value)) and homebrew_app not in installed_homebrew_apps
