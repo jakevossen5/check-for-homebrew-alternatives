@@ -4,7 +4,7 @@ import subprocess
 import os
 import multiprocessing
 from multiprocessing import Pool
-
+import sys
     # r = requests.get('https://formulae.brew.sh/api/cask.json')
     # homebrew_data = r.json()
 
@@ -25,11 +25,26 @@ all_avaliable_homebrew_apps = all_avaliable_homebrew_apps_str.split('\\n')
 #print("atom in hombrew apps:", "atom" in installed_homebrew_apps)
 #print("cd-to-terminal in hombrew apps:", "cd-to-terminal" in installed_homebrew_apps)
 
+# Progress method: Copyright (c) 2016 Vladimir Ignatev
+# https://gist.github.com/vladignatyev/06860ec2040cb497f0f3
+def progress(count, total, status=''):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+sys.stdout.flush() # As suggested by Rom Ruben (see: http://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console/27871113#comment50529068_27871113)
+
+
 def main():
     # all_avaliable_homebrew_apps = ['cd-to-terminal']
         # p.map(check_for_homebrew_app, all_avaliable_homebrew_apps)
-    for homebrew_app in all_avaliable_homebrew_apps:
-        check_for_homebrew_app(homebrew_app)
+    
+    for i in range(len(all_avaliable_homebrew_apps)):
+        progress(i, len(all_avaliable_homebrew_apps), 'checking homebrew apps...')
+        check_for_homebrew_app(all_avaliable_homebrew_apps[i])
 
 def check_for_homebrew_app(homebrew_app):
     url = 'https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json'
