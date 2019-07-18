@@ -1,4 +1,15 @@
 #+TITLE: check-for-homebrew-alternatives
 
-Run this Python script to look for potential Hombrew version of apps
-that are not installed
+Want to know which Homebrew casks can replace software already
+installed to your =/Applications/= folder? This will do just that
+
+* Installation
+
+#+BEGIN_SRC sh:
+brew install jakevossen5/taps/check-for-homebrew-alternatives
+#+END_SRC
+
+* Usage
+
+Just run =check-for-homebrew-alternatives=. It has to make an API
+request to every cask, so it will take a while. Be paitent.
