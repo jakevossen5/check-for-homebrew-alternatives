@@ -1,10 +1,14 @@
 #+TITLE: check-for-homebrew-alternatives
 
-Want to know which Homebrew casks can replace software already
-installed to your =/Applications/= folder? This will do just that
+Want to know which [[https://brew.sh][Homebrew]] casks can replace software already
+installed to your =/Applications/= folder? Run this script to
+automatically check for Homebrew alternatives. Might not catch 100% of
+the Applications, but will give you a good start if you are looking to
+use Homebrew for more of the software you have installed.
 
 * Installation
 
+Install with [[https://brew.sh][Homebrew]]:
 #+BEGIN_SRC sh:
 brew install jakevossen5/taps/check-for-homebrew-alternatives
 #+END_SRC
