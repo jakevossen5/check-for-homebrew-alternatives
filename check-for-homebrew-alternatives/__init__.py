@@ -63,8 +63,7 @@ def check_for_homebrew_app(homebrew_app):
                     if type(a) == dict:
                         for key, value in a.items():
                             if not_installed_and_valid_string(value, homebrew_app):
-                                print("Try installing", homebrew_app)
-                                print("Value that triggered", value)
+                                print("Try installing", homebrew_app, "to replace", value)
                     elif not_installed_and_valid_string(a, homebrew_app):
                         print("try installing", homebrew_app)
 
