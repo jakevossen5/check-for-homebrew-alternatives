@@ -6,7 +6,8 @@ import os
 import multiprocessing
 from multiprocessing import Pool
 import sys
-    # r = requests.get('https://formulae.brew.sh/api/cask.json')
+import asyncio
+# r = requests.get('https://formulae.brew.sh/api/cask.json')
     # homebrew_data = r.json()
 
 installed_homebrew_apps_str = str(subprocess.check_output(r'brew cask list -1', shell = True))
@@ -43,11 +44,20 @@ def main():
     # all_avaliable_homebrew_apps = ['cd-to-terminal']
         # p.map(check_for_homebrew_app, all_avaliable_homebrew_apps)
 
-    for i in range(len(all_avaliable_homebrew_apps)):
-        progress(i, len(all_avaliable_homebrew_apps), 'checking homebrew apps...')
-        check_for_homebrew_app(all_avaliable_homebrew_apps[i])
+    asyncio.run(check_for_all_homebrew_apps(all_avaliable_homebrew_apps))
+    # for i in range(len(all_avaliable_homebrew_apps)):
+    #     progress(i, len(all_avaliable_homebrew_apps), 'checking homebrew apps...')
+    #     check_for_homebrew_app(all_avaliable_homebrew_apps[i])
 
-def check_for_homebrew_app(homebrew_app):
+async def check_for_all_homebrew_apps(apps: list):
+    tasks = []
+    for app in apps:
+        tasks.append(asyncio.create_task(check_for_homebrew_app(app)))
+    for t in tasks:
+        await t
+
+
+async def check_for_homebrew_app(homebrew_app):
     url = 'https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json'
     req = urllib.request.Request(url)
 
