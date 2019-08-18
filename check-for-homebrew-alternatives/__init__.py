@@ -51,7 +51,7 @@ def check_for_homebrew_app(homebrew_app):
     url = 'https://formulae.brew.sh/api/cask/' + str(homebrew_app) + '.json'
     req = urllib.request.Request(url)
 
-    ##parsing response
+    # parsing response
     try:
         r = urllib.request.urlopen(req).read()
         # print("checking homrbew app", str(homebrew_app))
@@ -65,7 +65,7 @@ def check_for_homebrew_app(homebrew_app):
                             if not_installed_and_valid_string(value, homebrew_app):
                                 print("Try installing", homebrew_app, "to replace", value)
                     elif not_installed_and_valid_string(a, homebrew_app):
-                        print("try installing", homebrew_app)
+                        print("try installing", homebrew_app, "to replace", a)
 
         except:
             pass
