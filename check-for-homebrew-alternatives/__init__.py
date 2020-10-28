@@ -9,7 +9,7 @@ import sys
     # r = requests.get('https://formulae.brew.sh/api/cask.json')
     # homebrew_data = r.json()
 
-installed_homebrew_apps_str = str(subprocess.check_output(r'brew cask list -1', shell = True))
+installed_homebrew_apps_str = str(subprocess.check_output(r'brew list --cask -1', shell = True))
 installed_homebrew_apps_str = installed_homebrew_apps_str[2:]
 installed_homebrew_apps = installed_homebrew_apps_str.split('\\n') # there might be one extra elemenent at the end here
 # print("installed homebrew apps", installed_homebrew_apps)
